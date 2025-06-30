@@ -13,7 +13,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.skysync"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
@@ -66,6 +66,8 @@ dependencies {
     implementation(libs.converter.kotlinx.serialization)
 
     //Basics
+    implementation("androidx.compose.material:material:1.8.3")
+    implementation ("androidx.compose.foundation:foundation:1.3.1")
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)

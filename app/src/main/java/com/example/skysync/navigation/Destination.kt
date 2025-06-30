@@ -25,7 +25,9 @@ fun NavHostContainer() {
                 OnBoardingScreen(navController = navController)
             }
             composable<DashBoard> {
-                WeatherScreen()
+                WeatherScreen(
+                    navController = navController
+                )
             }
         }
     )

@@ -10,6 +10,8 @@ interface WeatherDataApi {
         @Query("latitude") latitude : Double,
         @Query("longitude") longitude : Double,
         @Query("daily") daily : String = "sunset,sunrise,uv_index_max",
-        @Query("current") current: String = "temperature_2m,relative_humidity_2m,weather_code,apparent_temperature,is_day,surface_pressure,wind_speed_10m,wind_direction_10m/",
+        @Query("hourly") hourly : Any = "temperature_2m,weather_code",
+        @Query("current") current: String = "temperature_2m,relative_humidity_2m,weather_code,apparent_temperature,is_day,surface_pressure,wind_speed_10m,wind_direction_10m",
+        @Query("timezone") timezone : String = "auto"
     ): WeatherData
 }

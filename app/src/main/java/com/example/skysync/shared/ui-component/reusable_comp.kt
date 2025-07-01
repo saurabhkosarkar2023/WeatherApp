@@ -154,7 +154,7 @@ fun threeDayForecast(
                     )
                     weatherEmoji(finalWCode[index], finalTime[index])
                     Text(
-                        finalTime[index],
+                        if(index==0) "Now" else finalTime[index],
                         style = MaterialTheme.typography.labelLarge,
                         color = Color.White
                     )

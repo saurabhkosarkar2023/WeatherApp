@@ -66,8 +66,6 @@ fun WeatherScreen(
     val scope = rememberCoroutineScope()
     val state = rememberPullToRefreshState()
     var refreshing by remember { mutableStateOf(false) }
-
-    val screenHeight = LocalConfiguration.current.screenHeightDp
     var weatherTemp by remember { mutableStateOf("") }
     var weatherCondition by remember { mutableStateOf("") }
     var sunriseTimimg by remember { mutableStateOf("") }
@@ -80,12 +78,13 @@ fun WeatherScreen(
     val weatherData by viewModel.weatherData.collectAsState()
     weatherTemp = weatherData.current.temperature2M.toString()
     weatherCondition = getWeatherCondition(weatherData.current.weatherCode)
-    var isDay by remember { mutableStateOf(false) }
+    var isDay by remember { mutableStateOf(weatherData.current.isDay.toInt() == 0) }
     LaunchedEffect(weatherData) {
         val sunriseList = weatherData.daily.sunrise
         val sunsetList = weatherData.daily.sunset
         val humidCheck = weatherData.current.relativeHumidity2M
-        isDay=weatherData.current.isDay.toInt() == 0
+        Log.d("WeatherScreen", "What is the data >> $weatherData")
+
         if (humidCheck != null) {
             humidity = humidCheck.toString()
         }
@@ -96,14 +95,17 @@ fun WeatherScreen(
         //24-hour
         if (weatherData.hourly.time.isNotEmpty()) {
             val data = extractHourlyTimePart(weatherData.hourly.time)
+            Log.d("LaunchedEffectHourly"," Time >> $data")
             hourlyTime = data
         }
         if (weatherData.hourly.temperature_2m.isNotEmpty()) {
             val data = extractHourlyTemperature(weatherData.hourly.temperature_2m)
+            Log.d("LaunchedEffectHourly"," Temperature >> $data")
             hourlyTemp = data
         }
         if (weatherData.hourly.weather_code.isNotEmpty()) {
             val data = extractWeatherCode(weatherData.hourly.weather_code)
+            Log.d("LaunchedEffectHourly"," WeatherCode >> $data")
             hourlyWeather = data
         }
     }

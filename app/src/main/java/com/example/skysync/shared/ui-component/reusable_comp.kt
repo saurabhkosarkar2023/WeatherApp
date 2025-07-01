@@ -121,15 +121,43 @@ fun threeDayForecast(
             verticalArrangement = Arrangement.Center,
             userScrollEnabled = true
         ) {
-            items(forecastTime.size) { index ->
+            var finalTemp=listOf<Double>()
+            var finalTime=listOf<String>()
+            var finalWCode=listOf<Int>()
+            if (forecastTemp.isNotEmpty() && forecastTime.isNotEmpty() && forecastWeatherCode.isNotEmpty()) {
+              try {
+                  val formatter = DateTimeFormatter.ofPattern("HH:00")
+                  val currentTime = LocalTime.now().format(formatter).toString()
+                  val currentIndex = forecastTime.indexOfFirst { predicate ->
+                      predicate==currentTime                         //"0+-$currentTime:00"
+                  }
+                  finalTemp=forecastTemp.subList(currentIndex,currentIndex+24)
+                  finalTime=forecastTime.subList(currentIndex,currentIndex+24)
+                  finalWCode=forecastWeatherCode.subList(currentIndex,currentIndex+24)
+              }
+              catch (exception:Exception){
+                  Log.d("Crash-error","Why Am I crashing bro >> ${exception.message} , ${exception.cause}")
+                }
+            }
+
+            items(finalTime.size) { index ->
                 Column(
                     modifier = Modifier.padding(8.dp),
                     verticalArrangement = Arrangement.SpaceBetween,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Text(forecastTemp[index].toString(), style = MaterialTheme.typography.labelLarge, color = Color.White)
-                    weatherEmoji(forecastWeatherCode[index])
-                    Text(forecastTime[index].toString(), style = MaterialTheme.typography.labelLarge, color = Color.White)
+
+                    Text(
+                        finalTemp[index].toString(),
+                        style = MaterialTheme.typography.labelLarge,
+                        color = Color.White
+                    )
+                    weatherEmoji(finalWCode[index], finalTime[index])
+                    Text(
+                        finalTime[index],
+                        style = MaterialTheme.typography.labelLarge,
+                        color = Color.White
+                    )
                 }
             }
         }
@@ -137,37 +165,210 @@ fun threeDayForecast(
 }
 
 @Composable
-fun weatherEmoji(code:Int) {
-    return when(code){
-        0 -> Icon(painter = painterResource(R.drawable.clear_sky), contentDescription = "Clear sky", modifier = Modifier.size(20.dp), tint = Color.Unspecified)
-        1 -> Icon(painter = painterResource(R.drawable.clear_sky), contentDescription = "Clear sky",modifier = Modifier.size(20.dp), tint = Color.Unspecified)
-        2 -> Icon(painter = painterResource(R.drawable.partial_cloudy), contentDescription = "Clear sky",modifier = Modifier.size(20.dp), tint = Color.Unspecified)
-        3 -> Icon(painter = painterResource(R.drawable.cloudy), contentDescription = "Clear sky",modifier = Modifier.size(20.dp), tint = Color.Unspecified)
-        45 -> Icon(painter = painterResource(R.drawable.foggy), contentDescription = "Clear sky",modifier = Modifier.size(20.dp), tint = Color.Unspecified)
-        48 -> Icon(painter = painterResource(R.drawable.rainy), contentDescription = "Clear sky",modifier = Modifier.size(20.dp), tint = Color.Unspecified)
-        51 -> Icon(painter = painterResource(R.drawable.rainy), contentDescription = "Clear sky",modifier = Modifier.size(20.dp), tint = Color.Unspecified)
-        53 -> Icon(painter = painterResource(R.drawable.rainy), contentDescription = "Clear sky",modifier = Modifier.size(20.dp), tint = Color.Unspecified)
-        55 -> Icon(painter = painterResource(R.drawable.rainy), contentDescription = "Clear sky",modifier = Modifier.size(20.dp), tint = Color.Unspecified)
-        56 -> Icon(painter = painterResource(R.drawable.rainy), contentDescription = "Clear sky",modifier = Modifier.size(20.dp), tint = Color.Unspecified)
-        57 -> Icon(painter = painterResource(R.drawable.rainy), contentDescription = "Clear sky",modifier = Modifier.size(20.dp), tint = Color.Unspecified)
-        61 -> Icon(painter = painterResource(R.drawable.rainy), contentDescription = "Clear sky",modifier = Modifier.size(20.dp), tint = Color.Unspecified)
-        63 -> Icon(painter = painterResource(R.drawable.rainy), contentDescription = "Clear sky",modifier = Modifier.size(20.dp), tint = Color.Unspecified)
-        65 -> Icon(painter = painterResource(R.drawable.rainy), contentDescription = "Clear sky",modifier = Modifier.size(20.dp), tint = Color.Unspecified)
-        66 -> Icon(painter = painterResource(R.drawable.rainy), contentDescription = "Clear sky",modifier = Modifier.size(20.dp), tint = Color.Unspecified)
-        67 -> Icon(painter = painterResource(R.drawable.rainy), contentDescription = "Clear sky",modifier = Modifier.size(20.dp), tint = Color.Unspecified)
-        71 -> Icon(painter = painterResource(R.drawable.snowfall), contentDescription = "Clear sky",modifier = Modifier.size(20.dp), tint = Color.Unspecified)
-        73 -> Icon(painter = painterResource(R.drawable.snowfall), contentDescription = "Clear sky",modifier = Modifier.size(20.dp), tint = Color.Unspecified)
-        75 -> Icon(painter = painterResource(R.drawable.snowfall), contentDescription = "Clear sky",modifier = Modifier.size(20.dp), tint = Color.Unspecified)
-        77 -> Icon(painter = painterResource(R.drawable.snowfall), contentDescription = "Clear sky",modifier = Modifier.size(20.dp), tint = Color.Unspecified)
-        80 -> Icon(painter = painterResource(R.drawable.rainy), contentDescription = "Clear sky",modifier = Modifier.size(20.dp), tint = Color.Unspecified)
-        81 -> Icon(painter = painterResource(R.drawable.rainy), contentDescription = "Clear sky",modifier = Modifier.size(20.dp), tint = Color.Unspecified)
-        82 -> Icon(painter = painterResource(R.drawable.rainy), contentDescription = "Clear sky",modifier = Modifier.size(20.dp), tint = Color.Unspecified)
-        85 -> Icon(painter = painterResource(R.drawable.snowfall), contentDescription = "Clear sky",modifier = Modifier.size(20.dp), tint = Color.Unspecified)
-        86 -> Icon(painter = painterResource(R.drawable.snowfall), contentDescription = "Clear sky",modifier = Modifier.size(20.dp), tint = Color.Unspecified)
-        95 -> Icon(painter = painterResource(R.drawable.thunderstorm), contentDescription = "Clear sky",modifier = Modifier.size(20.dp), tint = Color.Unspecified)
-        96 -> Icon(painter = painterResource(R.drawable.thunderstorm), contentDescription = "Clear sky",modifier = Modifier.size(20.dp), tint = Color.Unspecified)
-        99 -> Icon(painter = painterResource(R.drawable.thunderstorm), contentDescription = "Clear sky",modifier = Modifier.size(20.dp), tint = Color.Unspecified)
-        else -> Icon(painter = painterResource(R.drawable.clear_sky), contentDescription = "Clear sky",modifier = Modifier.size(20.dp), tint = Color.Unspecified)
+fun weatherEmoji(code: Int,time: String) {
+    return when (code) {
+        0 -> Icon(
+            painter = if (time > "18:00" || time < "06:00") painterResource(R.drawable.night) else painterResource(R.drawable.clear_sky),
+            contentDescription = "Clear sky",
+            modifier = Modifier.size(20.dp),
+            tint = Color.Unspecified
+        )
+
+        1 -> Icon(
+            painter = if (time > "18:00" && time < "05:00") painterResource(R.drawable.night) else painterResource(R.drawable.clear_sky),
+            contentDescription = "Clear sky",
+            modifier = Modifier.size(20.dp),
+            tint = Color.Unspecified
+        )
+
+        2 -> Icon(
+            painter =if (time > "18:00" && time < "05:00") painterResource(R.drawable.night) else painterResource(R.drawable.partial_cloudy),
+            contentDescription = "Clear sky",
+            modifier = Modifier.size(20.dp),
+            tint = Color.Unspecified
+        )
+
+        3 -> Icon(
+            painter =if ("05:00" >= time || "18:00" < time) painterResource(R.drawable.night) else painterResource(R.drawable.cloudy),
+            contentDescription = "Clear sky",
+            modifier = Modifier.size(20.dp),
+            tint = Color.Unspecified
+        )
+
+        45 -> Icon(
+            painter = painterResource(R.drawable.foggy),
+            contentDescription = "Clear sky",
+            modifier = Modifier.size(20.dp),
+            tint = Color.Unspecified
+        )
+
+        48 -> Icon(
+            painter = painterResource(R.drawable.rainy),
+            contentDescription = "Clear sky",
+            modifier = Modifier.size(20.dp),
+            tint = Color.Unspecified
+        )
+
+        51 -> Icon(
+            painter = painterResource(R.drawable.rainy),
+            contentDescription = "Clear sky",
+            modifier = Modifier.size(20.dp),
+            tint = Color.Unspecified
+        )
+
+        53 -> Icon(
+            painter = painterResource(R.drawable.rainy),
+            contentDescription = "Clear sky",
+            modifier = Modifier.size(20.dp),
+            tint = Color.Unspecified
+        )
+
+        55 -> Icon(
+            painter = painterResource(R.drawable.rainy),
+            contentDescription = "Clear sky",
+            modifier = Modifier.size(20.dp),
+            tint = Color.Unspecified
+        )
+
+        56 -> Icon(
+            painter = painterResource(R.drawable.rainy),
+            contentDescription = "Clear sky",
+            modifier = Modifier.size(20.dp),
+            tint = Color.Unspecified
+        )
+
+        57 -> Icon(
+            painter = painterResource(R.drawable.rainy),
+            contentDescription = "Clear sky",
+            modifier = Modifier.size(20.dp),
+            tint = Color.Unspecified
+        )
+
+        61 -> Icon(
+            painter = painterResource(R.drawable.rainy),
+            contentDescription = "Clear sky",
+            modifier = Modifier.size(20.dp),
+            tint = Color.Unspecified
+        )
+
+        63 -> Icon(
+            painter = painterResource(R.drawable.rainy),
+            contentDescription = "Clear sky",
+            modifier = Modifier.size(20.dp),
+            tint = Color.Unspecified
+        )
+
+        65 -> Icon(
+            painter = painterResource(R.drawable.rainy),
+            contentDescription = "Clear sky",
+            modifier = Modifier.size(20.dp),
+            tint = Color.Unspecified
+        )
+
+        66 -> Icon(
+            painter = painterResource(R.drawable.rainy),
+            contentDescription = "Clear sky",
+            modifier = Modifier.size(20.dp),
+            tint = Color.Unspecified
+        )
+
+        67 -> Icon(
+            painter = painterResource(R.drawable.rainy),
+            contentDescription = "Clear sky",
+            modifier = Modifier.size(20.dp),
+            tint = Color.Unspecified
+        )
+
+        71 -> Icon(
+            painter = painterResource(R.drawable.snowfall),
+            contentDescription = "Clear sky",
+            modifier = Modifier.size(20.dp),
+            tint = Color.Unspecified
+        )
+
+        73 -> Icon(
+            painter = painterResource(R.drawable.snowfall),
+            contentDescription = "Clear sky",
+            modifier = Modifier.size(20.dp),
+            tint = Color.Unspecified
+        )
+
+        75 -> Icon(
+            painter = painterResource(R.drawable.snowfall),
+            contentDescription = "Clear sky",
+            modifier = Modifier.size(20.dp),
+            tint = Color.Unspecified
+        )
+
+        77 -> Icon(
+            painter = painterResource(R.drawable.snowfall),
+            contentDescription = "Clear sky",
+            modifier = Modifier.size(20.dp),
+            tint = Color.Unspecified
+        )
+
+        80 -> Icon(
+            painter = painterResource(R.drawable.rainy),
+            contentDescription = "Clear sky",
+            modifier = Modifier.size(20.dp),
+            tint = Color.Unspecified
+        )
+
+        81 -> Icon(
+            painter = painterResource(R.drawable.rainy),
+            contentDescription = "Clear sky",
+            modifier = Modifier.size(20.dp),
+            tint = Color.Unspecified
+        )
+
+        82 -> Icon(
+            painter = painterResource(R.drawable.rainy),
+            contentDescription = "Clear sky",
+            modifier = Modifier.size(20.dp),
+            tint = Color.Unspecified
+        )
+
+        85 -> Icon(
+            painter = painterResource(R.drawable.snowfall),
+            contentDescription = "Clear sky",
+            modifier = Modifier.size(20.dp),
+            tint = Color.Unspecified
+        )
+
+        86 -> Icon(
+            painter = painterResource(R.drawable.snowfall),
+            contentDescription = "Clear sky",
+            modifier = Modifier.size(20.dp),
+            tint = Color.Unspecified
+        )
+
+        95 -> Icon(
+            painter = painterResource(R.drawable.thunderstorm),
+            contentDescription = "Clear sky",
+            modifier = Modifier.size(20.dp),
+            tint = Color.Unspecified
+        )
+
+        96 -> Icon(
+            painter = painterResource(R.drawable.thunderstorm),
+            contentDescription = "Clear sky",
+            modifier = Modifier.size(20.dp),
+            tint = Color.Unspecified
+        )
+
+        99 -> Icon(
+            painter = painterResource(R.drawable.thunderstorm),
+            contentDescription = "Clear sky",
+            modifier = Modifier.size(20.dp),
+            tint = Color.Unspecified
+        )
+
+        else -> Icon(
+            painter = painterResource(R.drawable.clear_sky),
+            contentDescription = "Clear sky",
+            modifier = Modifier.size(20.dp),
+            tint = Color.Unspecified
+        )
     }
 }
 
@@ -178,7 +379,6 @@ fun additionalParameters(
     image: @Composable (() -> Unit)? = null
 ) {
     val screenWidth = LocalConfiguration.current.screenWidthDp.dp
-
     Card(
         shape = RoundedCornerShape(8.dp),
         colors = CardDefaults.cardColors(
@@ -212,34 +412,34 @@ fun additionalParameters(
 
 
 fun extractHourlyTimePart(dateTimeList: List<String>): List<String> {
+    Log.d("HourlyData","Hourly Time >> $dateTimeList")
     return dateTimeList.map { dateTime ->
-        dateTime.split("T").getOrNull(1) ?: "" // handles missing 'T' safely
-    }.subList(0, 24)
+        dateTime.split("T").getOrNull(1) ?: ""
+    }
 }
-
+//
 //fun extractHourlyTimePart(dateTimeList: List<String>): List<String> {
 //    val formatter = DateTimeFormatter.ofPattern("HH:mm")
-//    val currentTime = LocalTime.now()
-//    Log.d("","What is the time bhai >> $currentTime")
+//    val currentTime = LocalTime.now().hour.toString()
+//    Log.d("", "What is the time bhai >> $currentTime")
 //
-//   return dateTimeList.map { dateTime ->
-//       dateTime.split("T").getOrNull(1).let {
-//           try {
-//               val extractedTime=LocalTime.parse(it,formatter)
-//               if (currentTime.isAfter(extractedTime)){
-//                   dateTime.substring(0, 5)
-//               } else null
-//           } catch (exception: Exception){
-//               null
-//           }
-//       }.toString().substring(24)
+//    val extractedTime = dateTimeList.map { dateTime ->
+//        dateTime.split("T").getOrNull(1) ?: ""
 //    }
+//    Log.d("", "What is the time bhai 2 >> $extractedTime")
+//    val finalData = extractedTime.indexOfFirst { predicate ->
+//        predicate!="$currentTime:00"
+//    }
+//    Log.d("FinalData","What is final data >> $finalData")
+//    return extractedTime.subList(20,20+24)
 //}
 
 fun extractHourlyTemperature(hourlyTemp: List<Double>): List<Double> {
-    return hourlyTemp.subList(0, 24)
+    Log.d("HourlyData","Hourly Temperature >> $hourlyTemp")
+    return hourlyTemp
 }
 
 fun extractWeatherCode(hourlyWeatherCode: List<Int>): List<Int> {
-    return hourlyWeatherCode.subList(0, 24)
+    Log.d("HourlyData","Weather code >> $hourlyWeatherCode")
+    return hourlyWeatherCode
 }

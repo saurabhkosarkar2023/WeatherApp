@@ -34,7 +34,7 @@ class WeatherDataViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 _isLoading.value = true
-                val response = weatherRepo.getWeatherData(lat = 12.971599, long = 77.594566)
+                val response = weatherRepo.getWeatherData(lat = 12.89, long = 77.63)
                 Log.d("Viewmodel-response", "What is the response >> ${response}")
                 _weatherData.value = response
                 _isLoading.value = false

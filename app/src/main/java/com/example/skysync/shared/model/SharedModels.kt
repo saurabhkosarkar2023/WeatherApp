@@ -8,10 +8,10 @@ import kotlinx.serialization.*
 
 @Serializable
 data class WeatherData(
-    val latitude: Double,
-    val longitude: Double,
+    val latitude: Double=0.0,
+    val longitude: Double=0.0,
     @SerialName("generationtime_ms")
-    val generationtimeMS: Double,
+    val generationtimeMS: Double=0.0,
     @SerialName("utc_offset_seconds")
     val utcOffsetSeconds: Long,
     val timezone: String,

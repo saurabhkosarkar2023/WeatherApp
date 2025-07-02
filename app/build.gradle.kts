@@ -53,7 +53,6 @@ dependencies {
     // ViewModel
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
-//    implementation(libs.androidx.lifecycle.viewmodel.navigation3)
 
     //Hilt
     implementation(libs.hilt.android)
@@ -65,8 +64,12 @@ dependencies {
     implementation(libs.okhttp.logging)
     implementation(libs.converter.kotlinx.serialization)
 
+    //room
+    implementation(libs.androidx.room.runtime)
+    ksp(libs.androidx.room.compiler)
+
     //Basics
-    implementation("androidx.compose.material:material:1.8.3")
+    implementation(libs.androidx.material)
     implementation ("androidx.compose.foundation:foundation:1.3.1")
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
